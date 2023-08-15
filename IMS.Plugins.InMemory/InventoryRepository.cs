@@ -30,6 +30,28 @@ namespace IMS.Plugins.InMemory
             return Task.CompletedTask;
         }
 
+        public Task EditInventoryAsync(Inventory inventory)
+        {
+            if (_inventories.Any(x => x.InventoryId != inventory.InventoryId && x.InventoryName.Equals(inventory.InventoryName, StringComparison.OrdinalIgnoreCase)))
+                return Task.CompletedTask;
+
+            var inv = _inventories.FirstOrDefault(x => x.InventoryId == inventory.InventoryId);
+            if (inv != null)
+            {
+                inv.InventoryName = inventory.InventoryName;
+                inv.Price = inventory.Price;
+                inv.Quantity = inventory.Quantity;
+            }
+            return Task.CompletedTask;
+        }
+
+        public async Task<Inventory> GetInventoriesByIdAsync(int inventoryId)
+        {
+            var inv = _inventories.First(x => x.InventoryId == inventoryId);
+            var newInv = new Inventory() { InventoryId = inv.InventoryId, InventoryName = inv.InventoryName, Price = inv.Price, Quantity = inv.Quantity };
+            return await Task.FromResult(newInv);
+        }
+
         public async Task<IEnumerable<Inventory>> GetInventoriesByNameAsync(string name)
         {
             if (string.IsNullOrWhiteSpace(name)) return await Task.FromResult(_inventories);
