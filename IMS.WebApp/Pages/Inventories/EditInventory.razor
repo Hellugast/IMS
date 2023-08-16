@@ -1,9 +1,9 @@
 ﻿@page "/editInventory/{inventoryId:int}"
 @using IMS.UseCases.Inventories.Interfaces;
 
-@inject IViewInventoriesByIdUseCase iViewInventoriesByIdUseCase
+@inject IViewInventoriesByIdUseCase ViewInventoriesByIdUseCase
 @inject NavigationManager navigationManager
-@inject IEditInventoryUseCase iEditInventoryUseCase
+@inject IEditInventoryUseCase EditInventoryUseCase
 
 <h3>EditInventory</h3>
 <br />
@@ -39,13 +39,13 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        inventory = await iViewInventoriesByIdUseCase.ExecuteAsync(inventoryId);
+        inventory = await ViewInventoriesByIdUseCase.ExecuteAsync(inventoryId);
 
     }
 
     private async Task SaveInventory()
     {
-        await iEditInventoryUseCase.ExecuteAsync(inventory);
+        await EditInventoryUseCase.ExecuteAsync(inventory);
         navigationManager.NavigateTo("/inventories");
     }
 

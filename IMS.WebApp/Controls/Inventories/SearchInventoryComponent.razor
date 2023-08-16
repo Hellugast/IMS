@@ -19,7 +19,7 @@
     [Parameter]
     public EventCallback<string> OnSearchInventory { get; set; }
 
-    public void OnSearch()
+    private void OnSearch()
     {
         OnSearchInventory.InvokeAsync(inventoryNameToSearch);
     }

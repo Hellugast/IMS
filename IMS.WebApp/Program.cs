@@ -2,6 +2,8 @@ using IMS.Plugins.InMemory;
 using IMS.UseCases.Inventories;
 using IMS.UseCases.Inventories.Interfaces;
 using IMS.UseCases.PluginInterfaces;
+using IMS.UseCases.Products;
+using IMS.UseCases.Products.Interfaces;
 using IMS.WebApp.Data;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -14,10 +16,16 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 
 builder.Services.AddSingleton<IInventoryRepository, InventoryRepository>();
+builder.Services.AddSingleton<IProductRepository, ProductRepository>();
+
 builder.Services.AddTransient<IViewInventoriesByNameUseCase, ViewInventoriesByNameUseCase>();
 builder.Services.AddTransient<IAddInventoryUseCase, AddInventoryUseCase>();
 builder.Services.AddTransient<IEditInventoryUseCase, EditInventoryUseCase>();
 builder.Services.AddTransient<IViewInventoriesByIdUseCase, ViewInventoriesByIdUseCase>();
+builder.Services.AddTransient<IViewProductByNameUseCase, ViewProductByNameUseCase>();
+builder.Services.AddTransient<IAddProductUseCase, AddProductUseCase>();
+
+
 
 var app = builder.Build();
 
