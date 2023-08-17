@@ -1,33 +1,40 @@
-﻿<SearchAndDisplayInventoriesComponent OnInventorySelected="OnInventorySelected"></SearchAndDisplayInventoriesComponent>
+﻿
+<div class="card">
+    <div class="card-body">
+        <SearchAndDisplayInventoriesComponent OnInventorySelected="OnInventorySelected"></SearchAndDisplayInventoriesComponent>
 
-@if (Product.ProductInventories != null && Product.ProductInventories.Count > 0)
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Quantity</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var prodInventory in Product.ProductInventories)
-            {
-                <tr>
-                    <td>
-                        @prodInventory.Inventory?.InventoryName
-                    </td>
-                    <td>
-                        <input type="number" min="0" @bind-value="prodInventory.InventoryQuantity">
-                    </td>
-                    <td>
-                        <button type="button" class="btn btn-link" @onclick="(() => RemoveInventory(prodInventory))">Remove</button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+        @if (Product.ProductInventories != null && Product.ProductInventories.Count > 0)
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Quantity</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var prodInventory in Product.ProductInventories)
+                    {
+                        <tr>
+                            <td>
+                                @prodInventory.Inventory?.InventoryName
+                            </td>
+                            <td>
+                                <input type="number" min="0" @bind-value="prodInventory.InventoryQuantity">
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-link" @onclick="(() => RemoveInventory(prodInventory))">Remove</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+
+
 
 
 @code {
