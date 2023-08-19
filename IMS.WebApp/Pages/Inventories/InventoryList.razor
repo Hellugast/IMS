@@ -1,4 +1,7 @@
 ﻿@page "/inventories"
+@using IMS.UseCases.Inventories.Interfaces;
+@using static IMS.WebApp.Controls.Common.AutoCompleteComponent;
+@inject IViewInventoriesByNameUseCase ViewInventoriesByNameUseCase
 
 @inject NavigationManager navigationManager
 
@@ -14,6 +17,8 @@
 
 
 @code {
+    private ItemViewModel? selectedItem = null;
+
     private string searchTerm = string.Empty;
 
     public void OnInventorySearch(string searchTerm)
@@ -25,5 +30,18 @@
     private void AddInventory()
     {
         navigationManager.NavigateTo("/addInventory");
+    }
+    public List<ItemViewModel> SearchFunction(string asd)
+    {
+        var result = ViewInventoriesByNameUseCase.ExecuteAsync(asd).GetAwaiter().GetResult();
+        if (result == null) return null;
+
+        return result.Select(x => new ItemViewModel { Id = x.InventoryId, Name = x.InventoryName }).ToList();
+        //return new() { new() { Id = 1, Name = $"{asd}" } };
+    }
+
+    private void OnItemSelected(ItemViewModel item)
+    {
+        selectedItem = item;
     }
 }

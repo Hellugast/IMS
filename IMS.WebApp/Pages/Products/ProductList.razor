@@ -1,5 +1,8 @@
 ﻿@page "/products"
+@using IMS.UseCases.Inventories.Interfaces;
+@using static IMS.WebApp.Controls.Common.AutoCompleteComponent;
 @inject NavigationManager navigationManager
+@inject IViewInventoriesByNameUseCase ViewInventoriesByNameUseCase
 
 <h3>Product List</h3>
 <br />
@@ -9,7 +12,6 @@
 <ProductListComponent SearchTerm="@searchTerm"></ProductListComponent>
 <br />
 <button type="button" class="btn btn-primary" @onclick="AddProduct">Add Product</button>
-
 
 @code {
     private string searchTerm = string.Empty;
