@@ -21,6 +21,7 @@ namespace IMS.WebApp.ViewModelsValidations
                                 $"{produceViewModel.QuantityToProduce} products", new[] { validationContext.MemberName });
 
                         }
+                        //pi.Inventory.Quantity -= (pi.InventoryQuantity * produceViewModel.QuantityToProduce);
                     }
                 }
             }

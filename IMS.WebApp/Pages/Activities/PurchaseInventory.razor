@@ -81,9 +81,9 @@
 
     }
 
-    public List<ItemViewModel> SearchFunction(string name)
+    public async Task<List<ItemViewModel>> SearchFunction(string name)
     {
-        var result = ViewInventoriesByNameUseCase.ExecuteAsync(name).GetAwaiter().GetResult();
+        var result = await ViewInventoriesByNameUseCase.ExecuteAsync(name);
         if (result == null) return null;
 
         return result.Select(x => new ItemViewModel { Id = x.InventoryId, Name = x.InventoryName }).ToList();

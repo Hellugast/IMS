@@ -1,0 +1,89 @@
+﻿@page "/sell"
+
+@using IMS.UseCases.Activities.Interfaces;
+@using IMS.UseCases.Products.Interfaces;
+@using IMS.WebApp.Controls.Common
+@using IMS.WebApp.ViewModels;
+@using static IMS.WebApp.Controls.Common.AutoCompleteComponent;
+
+@inject IViewProductByNameUseCase ViewProductByNameUseCase
+@inject IViewProductByIdUseCase ViewProductByIdUseCase
+@inject ISellProductUseCase SellProductUseCase
+@inject IJSRuntime JSRuntime
+
+
+<h3>SellProduct</h3>
+<br />
+<EditForm id="sell-form" Model="sellViewModel" OnValidSubmit="Sell">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+    <ValidationSummary></ValidationSummary>
+
+    <div class="form-group">
+        <label for="po">Sales Order</label>
+        <InputText id="so" @bind-Value="sellViewModel.SalesOrderNumber" class="form-control"></InputText>
+    </div>
+    <br />
+    <div class="card">
+        <div class="card-body">
+            <div class="form-group">
+                <AutoCompleteComponent Label="Product to Sell" SearchFunction="SearchFunction" OnItemSelected="OnItemSelected"></AutoCompleteComponent>
+                <input type="hidden" value="@sellViewModel.ProductId" />
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="form-group">
+        <label for="qty">Quantity</label>
+        <InputNumber id="qty" @bind-Value="sellViewModel.QuantityToSell" class="form-control"></InputNumber>
+    </div>
+    <div class="form-group">
+        <label for="price">Unit Price</label>
+        <InputNumber id="price" @bind-Value="sellViewModel.UnitPrice" class="form-control"></InputNumber>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Sell</button>
+
+</EditForm>
+
+
+@code {
+
+    private SellViewModel sellViewModel = new();
+    private Product? selectedProduct = null;
+
+    private async Task Sell()
+    {
+        await SellProductUseCase.ExecuteAsync(sellViewModel.SalesOrderNumber,
+            sellViewModel.Product, sellViewModel.QuantityToSell, sellViewModel.UnitPrice, "Bab");
+
+        sellViewModel = new();
+        selectedProduct = null;
+    }
+
+    private async void OnItemSelected(ItemViewModel item)
+    {
+        selectedProduct = (await ViewProductByIdUseCase.ExecuteAsync(item.Id));
+        sellViewModel.ProductId = item.Id;
+        sellViewModel.Product = selectedProduct;
+        sellViewModel.UnitPrice = selectedProduct.Price;
+
+    }
+
+    public async Task<List<ItemViewModel>> SearchFunction(string name)
+    {
+        var result = await ViewProductByNameUseCase.ExecuteAsync(name);
+        if (result == null) return null;
+
+        return result.Select(x => new ItemViewModel { Id = x.ProductId, Name = x.ProductName }).ToList();
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+
+        if (firstRender)
+        {
+            JSRuntime.InvokeVoidAsync("PreventFormSubmition", "sell-form");
+        }
+    }
+}
