@@ -25,7 +25,7 @@ namespace IMS.CoreBusiness
 
         [Required]
         public int QuantityAfter { get; set; }
-        public double UnitPrice { get; set; }
+        public double? UnitPrice { get; set; }
         public DateTime TransactionDate { get; set; }
 
         [Required]

@@ -22,6 +22,38 @@ namespace IMS.Plugins.InMemory
             _inventoryTransactionRepository = inventoryTransactionRepository;
         }
 
+        public async Task<IEnumerable<ProductTransaction>> GetProductTransactionsAsync(string productName, DateTime? dateFrom, DateTime? dateTo, ProductTransactionType? productTransactionType)
+        {
+            var products = (await _productRepository.GetProductsByNameAsync(string.Empty)).ToList();
+
+
+            var query = from it in _productTransactions
+                        join prod in products on it.ProductId equals prod.ProductId
+                        where
+                        (string.IsNullOrWhiteSpace(productName) || prod.ProductName.ToLower().IndexOf(productName.ToLower()) >= 0)
+                        &&
+                        (!dateFrom.HasValue || it.TransactionDate >= dateFrom.Value.Date)
+                        &&
+                        (!dateTo.HasValue || it.TransactionDate >= dateTo.Value.Date)
+                        &&
+                        (!productTransactionType.HasValue || it.ActivityType == productTransactionType)
+                        select new ProductTransaction()
+                        {
+                            Product = prod,
+                            ProductTransactionId = it.ProductTransactionId,
+                            SONumber = it.SONumber,
+                            ProductionNumber = it.ProductionNumber,
+                            ProductId = it.ProductId,
+                            QuantityBefore = it.QuantityBefore,
+                            ActivityType = it.ActivityType,
+                            QuantityAfter = it.QuantityAfter,
+                            TransactionDate = it.TransactionDate,
+                            DoneBy = it.DoneBy,
+                            UnitPrice = it.UnitPrice,
+                        };
+            return query;
+        }
+
         public async Task ProduceAsync(string productionNumber, Product product, int quantity, string doneBy)
         {
             var prod = await _productRepository.GetProductByIdAsync(product.ProductId);
