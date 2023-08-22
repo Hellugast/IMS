@@ -63,8 +63,8 @@ namespace IMS.Plugins.InMemory
                 {
                     if (pi.Inventory != null)
                     {
-                        _inventoryTransactionRepository.ProduceAsync(productionNumber,
-                            pi.Inventory, pi.InventoryQuantity * quantity, doneBy, -1);
+                        await _inventoryTransactionRepository.ProduceAsync(productionNumber,
+                             pi.Inventory, pi.InventoryQuantity * quantity, doneBy, -1);
                     }
 
                     var inv = await _inventoryRepository.GetInventoriesByIdAsync(pi.InventoryId);

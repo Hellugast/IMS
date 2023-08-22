@@ -20,5 +20,7 @@ namespace IMS.CoreBusiness
 
         [Range(0, int.MaxValue)]
         public double Price { get; set; }
+
+        public List<ProductInventory> ProductInventories { get; set; } = new();
     }
 }
