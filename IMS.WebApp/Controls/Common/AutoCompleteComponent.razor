@@ -72,7 +72,7 @@
 
     }
 
-    private void OnSelectItem(ItemViewModel? item)
+    private async Task OnSelectItem(ItemViewModel? item)
     {
 
         ClearCurrentItem();
@@ -80,12 +80,12 @@
         {
             selectedItem = item;
             userInput = item.Name;
-            OnItemSelected.InvokeAsync(item);
+            await OnItemSelected.InvokeAsync(item);
         };
 
     }
 
-    private void OnPressKeys(KeyboardEventArgs e)
+    private async Task OnPressKeys(KeyboardEventArgs e)
     {
         if ((e.Code == "ArrowDown" || e.Code == "ArrowUp") && searchResult != null && searchResult.Count > 0)
         {
@@ -103,7 +103,7 @@
         }
         else if (e.Code == "Enter" || e.Code == "NumpadEnter")
         {
-            OnSelectItem(currentItem);
+            await OnSelectItem(currentItem);
         }
     }
 

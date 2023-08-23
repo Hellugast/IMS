@@ -43,7 +43,7 @@ namespace IMS.Plugins.EFCoreSqlServer.Migrations
 
                     b.HasKey("InventoryId");
 
-                    b.ToTable("Inventories");
+                    b.ToTable("Inventories", (string)null);
 
                     b.HasData(
                         new
@@ -111,7 +111,7 @@ namespace IMS.Plugins.EFCoreSqlServer.Migrations
 
                     b.HasIndex("InventoryId");
 
-                    b.ToTable("InventoryTransactions");
+                    b.ToTable("InventoryTransactions", (string)null);
                 });
 
             modelBuilder.Entity("IMS.CoreBusiness.Product", b =>
@@ -135,7 +135,7 @@ namespace IMS.Plugins.EFCoreSqlServer.Migrations
 
                     b.HasKey("ProductId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
 
                     b.HasData(
                         new
@@ -169,7 +169,7 @@ namespace IMS.Plugins.EFCoreSqlServer.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductInventories");
+                    b.ToTable("ProductInventories", (string)null);
 
                     b.HasData(
                         new
@@ -234,7 +234,7 @@ namespace IMS.Plugins.EFCoreSqlServer.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductTransactions");
+                    b.ToTable("ProductTransactions", (string)null);
                 });
 
             modelBuilder.Entity("IMS.CoreBusiness.InventoryTransaction", b =>

@@ -25,7 +25,10 @@
     <div class="card">
         <div class="card-body">
             <div class="form-group">
-                <AutoCompleteComponent Label="Inventory to Purchase" SearchFunction="SearchFunction" OnItemSelected="OnItemSelected"></AutoCompleteComponent>
+                <AutoCompleteComponent Label="Inventory to Purchase"
+                                       SearchFunction="SearchFunction"
+                                       OnItemSelected="OnItemSelected">
+                </AutoCompleteComponent>
                 <input type="hidden" value="@purchaseViewModel.InventoryId" />
                 @if (purchaseViewModel.InventoryId > 0 && purchaseViewModel.InventoryPrice >= 0)
                 {
@@ -50,9 +53,7 @@
 
     private PurchaseViewModel purchaseViewModel = new();
 
-    private ItemViewModel? selectedItem = null;
-
-    private Inventory? selectedInventory = new();
+    private Inventory? selectedInventory = null;
 
     protected override void OnAfterRender(bool firstRender)
     {
@@ -64,16 +65,19 @@
         }
     }
 
-    private async void Purchase()
+    private async Task Purchase()
     {
-        await PurchaseInventoryUseCase.ExecuteAsync(purchaseViewModel.PONumber,
+        if (selectedInventory != null)
+        {
+            await PurchaseInventoryUseCase.ExecuteAsync(purchaseViewModel.PONumber,
             selectedInventory, purchaseViewModel.QuantityToPurchase, "Bab");
+        }
 
         purchaseViewModel = new();
         selectedInventory = null;
     }
 
-    private async void OnItemSelected(ItemViewModel item)
+    private async Task OnItemSelected(ItemViewModel item)
     {
         selectedInventory = (await ViewInventoriesByIdUseCase.ExecuteAsync(item.Id));
         purchaseViewModel.InventoryId = item.Id;

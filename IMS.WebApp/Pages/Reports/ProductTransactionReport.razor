@@ -11,8 +11,8 @@
 <div id="printarea">
     <div class="row">
         <div class="col">
-            <label for="inv">Product Name</label>
-            <input type="text" id="inv" class="form-control" @bind-value="@invName" />
+            <label for="prod">Product Name</label>
+            <input type="text" id="prod" class="form-control" @bind-value="@prodName" />
         </div>
         <div class="col">
             <label for="df">Date From</label>
@@ -56,26 +56,26 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var it in ProductTransactions)
+                @foreach (var pt in ProductTransactions)
                 {
                     <tr>
-                        <td>@it.TransactionDate.ToString("dd/MM/yyyy")</td>
-                        <td>@it.Product.ProductName</td>
+                        <td>@pt.TransactionDate.ToString("dd/MM/yyyy")</td>
+                        <td>@pt.Product.ProductName</td>
                         <td>
-                            @if (it.ActivityType == ProductTransactionType.ProduceProduct)
+                            @if (pt.ActivityType == ProductTransactionType.ProduceProduct)
                             {
                                 <text>Produce</text>
                             }
-                            else if (it.ActivityType == ProductTransactionType.ProduceProduct)
+                            else if (pt.ActivityType == ProductTransactionType.SellProduct)
                             {
                                 <text>Sell</text>
                             }
                         </td>
-                        <td>@it.QuantityBefore</td>
-                        <td>@it.QuantityAfter</td>
-                        <td>@it.UnitPrice?.ToString("c")</td>
-                        <td>@it.SONumber</td>
-                        <td>@it.ProductionNumber</td>
+                        <td>@pt.QuantityBefore</td>
+                        <td>@pt.QuantityAfter</td>
+                        <td>@pt.UnitPrice?.ToString("c")</td>
+                        <td>@pt.SONumber</td>
+                        <td>@pt.ProductionNumber</td>
                     </tr>
                 }
             </tbody>
@@ -85,23 +85,19 @@
 
 
 @code {
-    private string invName = string.Empty;
+    private string prodName = string.Empty;
     private DateTime? dateFrom;
     private DateTime? dateTo;
     private int activityTypeId = 0;
     private IEnumerable<ProductTransaction>? ProductTransactions;
 
-
     private async Task SearchProduct()
     {
-
-        ProductTransactionType? invType = null;
+        ProductTransactionType? prodType = null;
         if (activityTypeId != 0)
-        {
-            invType = (ProductTransactionType)activityTypeId;
-        }
+            prodType = (ProductTransactionType)activityTypeId;
 
-        ProductTransactions = await SearchProductTransactionsUseCase.ExecuteAsync(invName, dateFrom, dateTo, invType);
+        ProductTransactions = await SearchProductTransactionsUseCase.ExecuteAsync(prodName, dateFrom, dateTo, prodType);
     }
 
     private void PrintReport()

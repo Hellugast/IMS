@@ -29,7 +29,7 @@ namespace IMS.Plugins.EFCoreSqlServer
                         &&
                         (!dateFrom.HasValue || it.TransactionDate >= dateFrom.Value.Date)
                         &&
-                        (!dateTo.HasValue || it.TransactionDate >= dateTo.Value.Date)
+                        (!dateTo.HasValue || it.TransactionDate <= dateTo.Value.Date)
                         &&
                         (!transactionType.HasValue || it.ActivityType == transactionType)
                         select it;

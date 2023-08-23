@@ -33,6 +33,6 @@ namespace IMS.CoreBusiness
         [Required]
         public string DoneBy { get; set; } = string.Empty;
 
-        public Product? Product { get; set; } = new();
+        public Product? Product { get; set; }
     }
 }

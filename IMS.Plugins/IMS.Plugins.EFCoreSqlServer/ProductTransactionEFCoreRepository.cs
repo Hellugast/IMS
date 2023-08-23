@@ -29,17 +29,15 @@ namespace IMS.Plugins.EFCoreSqlServer
         {
             using var db = _dbContextFactory.CreateDbContext();
 
-            var products = (await _productRepository.GetProductsByNameAsync(string.Empty)).ToList();
-
 
             var query = from pt in db.ProductTransactions
-                        join prod in products on pt.ProductId equals prod.ProductId
+                        join prod in db.Products on pt.ProductId equals prod.ProductId
                         where
                         (string.IsNullOrWhiteSpace(productName) || prod.ProductName.ToLower().IndexOf(productName.ToLower()) >= 0)
                         &&
                         (!dateFrom.HasValue || pt.TransactionDate >= dateFrom.Value.Date)
                         &&
-                        (!dateTo.HasValue || pt.TransactionDate >= dateTo.Value.Date)
+                        (!dateTo.HasValue || pt.TransactionDate <= dateTo.Value.Date)
                         &&
                         (!productTransactionType.HasValue || pt.ActivityType == productTransactionType)
                         select pt;

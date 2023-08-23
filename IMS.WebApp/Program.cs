@@ -1,5 +1,6 @@
 using IMS.Plugins.EFCoreSqlServer;
 using IMS.Plugins.InMemory;
+using IMS.UseCases;
 using IMS.UseCases.Activities;
 using IMS.UseCases.Activities.Interfaces;
 using IMS.UseCases.Inventories;
@@ -37,19 +38,9 @@ else
     builder.Services.AddTransient<IInventoryTransactionRepository, InventoryTransactionEFCoreRepository>();
 }
 
-builder.Services.AddTransient<IViewInventoriesByNameUseCase, ViewInventoriesByNameUseCase>();
-builder.Services.AddTransient<IAddInventoryUseCase, AddInventoryUseCase>();
-builder.Services.AddTransient<IEditInventoryUseCase, EditInventoryUseCase>();
-builder.Services.AddTransient<IViewInventoriesByIdUseCase, ViewInventoriesByIdUseCase>();
-builder.Services.AddTransient<IViewProductByNameUseCase, ViewProductByNameUseCase>();
-builder.Services.AddTransient<IAddProductUseCase, AddProductUseCase>();
-builder.Services.AddTransient<IViewProductByIdUseCase, ViewProductByIdUseCase>();
-builder.Services.AddTransient<IEditProductUseCase, EditProductUseCase>();
-builder.Services.AddTransient<IPurchaseInventoryUseCase, PurchaseInventoryUseCase>();
-builder.Services.AddTransient<IProduceProductUseCase, ProduceProductUseCase>();
-builder.Services.AddTransient<ISellProductUseCase, SellProductUseCase>();
-builder.Services.AddTransient<ISearchInventoryTransactionsUseCase, SearchInventoryTransactionsUseCase>();
-builder.Services.AddTransient<ISearchProductTransactionsUseCase, SearchProductTransactionsUseCase>();
+
+builder.Services.AddUseCasesServices();
+
 
 builder.Services.AddDbContextFactory<IMSContext>(options =>
 {

@@ -53,8 +53,11 @@
 
     private async Task Sell()
     {
-        await SellProductUseCase.ExecuteAsync(sellViewModel.SalesOrderNumber,
+        if (sellViewModel.Product != null)
+        {
+            await SellProductUseCase.ExecuteAsync(sellViewModel.SalesOrderNumber,
             sellViewModel.Product, sellViewModel.QuantityToSell, sellViewModel.UnitPrice, "Bab");
+        }
 
         sellViewModel = new();
         selectedProduct = null;
@@ -62,7 +65,7 @@
 
     private async void OnItemSelected(ItemViewModel item)
     {
-        selectedProduct = (await ViewProductByIdUseCase.ExecuteAsync(item.Id));
+        selectedProduct = await ViewProductByIdUseCase.ExecuteAsync(item.Id);
         sellViewModel.ProductId = item.Id;
         sellViewModel.Product = selectedProduct;
         sellViewModel.UnitPrice = selectedProduct.Price;

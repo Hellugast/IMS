@@ -25,7 +25,10 @@
     <div class="card">
         <div class="card-body">
             <div class="form-group">
-                <AutoCompleteComponent Label="Product to Produce" SearchFunction="SearchFunction" OnItemSelected="OnItemSelected"></AutoCompleteComponent>
+                <AutoCompleteComponent Label="Product to Produce"
+                                       SearchFunction="SearchFunction"
+                                       OnItemSelected="OnItemSelected">
+                </AutoCompleteComponent>
                 <input type="hidden" value="@produceViewModel.ProductId" />
 
             </div>
@@ -57,16 +60,19 @@
 
     public async Task Produce()
     {
-        await ProduceProductUseCase.ExecuteAsync(produceViewModel.ProductionNumber,
+        if (selectedProduct != null)
+        {
+            await ProduceProductUseCase.ExecuteAsync(produceViewModel.ProductionNumber,
             selectedProduct, produceViewModel.QuantityToProduce, "Bab");
+        }
 
         produceViewModel = new();
         selectedProduct = null;
     }
 
-    private async void OnItemSelected(ItemViewModel item)
+    private async Task OnItemSelected(ItemViewModel item)
     {
-        selectedProduct = (await ViewProductByIdUseCase.ExecuteAsync(item.Id));
+        selectedProduct = await ViewProductByIdUseCase.ExecuteAsync(item.Id);
         produceViewModel.ProductId = item.Id;
         produceViewModel.Product = selectedProduct;
 
