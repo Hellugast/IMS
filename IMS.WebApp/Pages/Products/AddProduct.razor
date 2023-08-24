@@ -3,6 +3,7 @@
 @inject NavigationManager navigationManager
 @inject IAddProductUseCase AddProductUseCase
 
+@attribute [Authorize(Policy = "Inventory")]
 
 <h3>AddProduct</h3>
 <br />

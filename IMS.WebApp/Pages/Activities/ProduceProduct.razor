@@ -10,6 +10,8 @@
 
 @inject IJSRuntime JSRuntime
 
+@attribute [Authorize(Policy = "Production")]
+
 <h3>ProduceProduct</h3>
 <br />
 
@@ -45,8 +47,21 @@
 </EditForm>
 
 @code {
+    private AuthenticationState? authenticationState;
+
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationStateTask { get; set; }
+
     private ProduceViewModel produceViewModel = new();
     private Product? selectedProduct = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (authenticationStateTask != null)
+        {
+            authenticationState = await authenticationStateTask;
+        }
+    }
 
     protected override void OnAfterRender(bool firstRender)
     {
@@ -60,10 +75,10 @@
 
     public async Task Produce()
     {
-        if (selectedProduct != null)
+        if (authenticationState != null && selectedProduct != null && !string.IsNullOrWhiteSpace(authenticationState.User.Identity?.Name))
         {
             await ProduceProductUseCase.ExecuteAsync(produceViewModel.ProductionNumber,
-            selectedProduct, produceViewModel.QuantityToProduce, "Bab");
+            selectedProduct, produceViewModel.QuantityToProduce, authenticationState.User.Identity.Name);
         }
 
         produceViewModel = new();

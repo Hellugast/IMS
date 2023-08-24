@@ -11,6 +11,8 @@
 @inject ISellProductUseCase SellProductUseCase
 @inject IJSRuntime JSRuntime
 
+@attribute [Authorize(Policy = "Sales")]
+
 
 <h3>SellProduct</h3>
 <br />
@@ -48,15 +50,26 @@
 
 @code {
 
+    private AuthenticationState? authenticationState;
+
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationStateTask { get; set; }
+
     private SellViewModel sellViewModel = new();
     private Product? selectedProduct = null;
 
+    protected override async Task OnInitializedAsync()
+    {
+        if (authenticationStateTask != null)
+            authenticationState = await authenticationStateTask;
+    }
+
     private async Task Sell()
     {
-        if (sellViewModel.Product != null)
+        if (authenticationState != null && sellViewModel.Product != null && !string.IsNullOrWhiteSpace(authenticationState.User.Identity?.Name))
         {
             await SellProductUseCase.ExecuteAsync(sellViewModel.SalesOrderNumber,
-            sellViewModel.Product, sellViewModel.QuantityToSell, sellViewModel.UnitPrice, "Bab");
+            sellViewModel.Product, sellViewModel.QuantityToSell, sellViewModel.UnitPrice, authenticationState.User.Identity.Name);
         }
 
         sellViewModel = new();

@@ -5,6 +5,8 @@
 @using IMS.CoreBusiness;
 @using IMS.UseCases.Inventories.Interfaces;
 
+@attribute [Authorize(Policy = "Inventory")]
+
 <h3>AddInventory</h3>
 <br />
 
