@@ -56,7 +56,7 @@
         user = userManager.Users.First(u => u.Id == UserId);
         var claims = await userManager.GetClaimsAsync(user);
         departmentClaim = claims.FirstOrDefault(x => x.Type == "Department");
-        if (departmentClaim != null)
+        if (departmentClaim == null)
         {
             userHadDepartment = false;
             departmentClaim = new("Department", string.Empty);
@@ -72,9 +72,9 @@
     private async Task SaveUser()
     {
         if (userHadDepartment)
-            await userManager.ReplaceClaimAsync(user, departmentClaim, new Claim("Deparment", viewModel.Department));
+            await userManager.ReplaceClaimAsync(user, departmentClaim, new Claim("Department", viewModel.Department));
         else
-            await userManager.AddClaimAsync(user, new Claim("Deparment", viewModel.Department));
+            await userManager.AddClaimAsync(user, new Claim("Department", viewModel.Department));
 
         navigationManager.NavigateTo("/manageUsers");
     }
